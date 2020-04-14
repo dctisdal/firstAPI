@@ -11,11 +11,16 @@ def hello_world():
 def get_users():
    if request.method == 'GET':
       search_username = request.args.get('name')
+      search_userjob = request.args.get('job')
       if search_username :
          subdict = {'users_list' : []}
          for user in users['users_list']:
             if user['name'] == search_username:
                subdict['users_list'].append(user)
+         if search_userjob :  
+            for u in subdict['users_list']:
+               if u['job'] != search_userjob:
+                  subdict['users_list'].remove(u)
          return subdict
       return users
    elif request.method == 'POST':
