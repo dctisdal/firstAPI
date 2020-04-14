@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-@app.route("/users", methods=["GET", "POST"])
+@app.route("/users", methods=["GET", "POST", "DELETE"])
 def get_users():
    if request.method == 'GET':
       search_username = request.args.get('name')
@@ -24,6 +24,14 @@ def get_users():
       resp = jsonify(success=True)
       #resp.status_code = 200 #optionally, you can always set a response code. 
       # 200 is the default code for a normal response
+      return resp
+   elif request.method == 'DELETE':
+      userToDel = request.get_json()
+      if userToDel in users['users_list']:
+         users['users_list'].remove(userToDel)
+         resp = jsonify(success=True)
+      else: 
+         resp = jsonify(success=False)
       return resp
 
 @app.route('/users/<id>')
